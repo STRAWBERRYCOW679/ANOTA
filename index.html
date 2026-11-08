@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATONA — Minimalist Fashion</title>
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-outer: #26482b;
+      --bg-hero-top: #466847;
+      --bg-hero-bottom: #608561;
+      --text-white: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.85);
+      --accent-dot: #d6c86b;
+      --dark-pill: #335235;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+
+       body {
+      background-color: var(--bg-outer);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 48px 96px;
+    }
+
+    .hero-wrapper {
+      width: 100%;
+      max-width: none;
+      height: auto;
+      min-height: 820px;
+      background: linear-gradient(180deg, var(--bg-hero-top) 0%, var(--bg-hero-bottom) 100%);
+      border-radius: 18px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 36px 64px 0 64px;
+      color: var(--text-white);
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      z-index: 6;
+      margin-top: 24px;
+    }
+
+    .hero-model {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 88%;
+      width: auto;
+      max-width: 90%;
+      object-fit: contain;
+      object-position: bottom center;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+
+
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: baseline;
+      text-decoration: none;
+      color: var(--text-white);
+    }
+
+    .logo span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background-color: var(--accent-dot);
+      border-radius: 50%;
+      margin-left: 3px;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 38px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--text-white);
+    }
+
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .nav-icons svg {
+      width: 19px;
+      height: 19px;
+      stroke: var(--text-white);
+      fill: none;
+      stroke-width: 1.8;
+      cursor: pointer;
+    }
+
+    .watermark-text {
+      position: absolute;
+      top: 16%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(6rem, 16.5vw, 15.5rem);
+      font-weight: 800;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.32);
+      user-select: none;
+      pointer-events: none;
+      z-index: 1;
+      white-space: nowrap;
+    }
+
+    .hero-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 230px;
+      margin-bottom: 42px;
+      z-index: 5;
+    }
+
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .video-pill {
+      display: inline-flex;
+      align-items: center;
+      background: var(--text-white);
+      border-radius: 50px;
+      padding: 6px 14px 6px 6px;
+      width: fit-content;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .video-pill:hover {
+      transform: translateY(-2px);
+    }
+
+    .video-thumb {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      background-color: #222;
+    }
+
+    .video-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .play-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    .play-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-white);
+    }
+
+    .video-label {
+      writing-mode: vertical-rl;
+      color: #222;
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin-left: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .stats h2 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .stats p {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      letter-spacing: 0.8px;
+      margin-top: 8px;
+      color: var(--text-muted);
+    }
+
+    .stats p::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      background: var(--text-white);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .right-column {
+      max-width: 340px;
+      margin-bottom: 10px;
+    }
+
+    .right-column p {
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background-color: var(--text-white);
+      color: #1f2e21;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      padding: 16px 32px;
+      border-radius: 50px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+    }
+
+    .cta-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: #1f2e21;
+      stroke-width: 2.2;
+      fill: none;
+    }
+
+    
+
+    .cat-card {
+      background: var(--text-white);
+      border-radius: 20px 20px 0 0;
+      padding: 14px 18px 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      height: 118px;
+      text-decoration: none;
+      color: #1a241b;
+      transition: transform 0.25s ease;
+    }
+
+    .cat-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .cat-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      height: 100%;
+    }
+
+    .cat-img-box {
+      width: 96px;
+      height: 104px;
+      border-radius: 14px 14px 0 0;
+      overflow: hidden;
+      background: #e5e8e5;
+      align-self: flex-end;
+    }
+
+    .cat-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cat-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .cat-arrow {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background-color: var(--dark-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+
+    .cat-arrow svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-white);
+      stroke-width: 2.2;
+      fill: none;
+    }
+
+    @media (max-width: 992px) {
+      .hero-wrapper {
+        padding: 28px 28px 0 28px;
+      }
+      nav {
+        display: none;
+      }
+      .hero-model {
+        opacity: 0.45;
+        left: 50%;
+      }
+      .hero-main {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 36px;
+        margin-top: 140px;
+      }
+      .category-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .cat-card {
+        border-radius: 18px;
+        height: 100px;
+        padding-bottom: 14px;
+      }
+      .cat-img-box {
+        height: 74px;
+        border-radius: 12px;
+        align-self: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero-wrapper">
+    <header>
+      <a href="#" class="logo">ATONA<span></span></a>
+      
+      <nav>
+        <ul>
+          <li><a href="shop.html">SHOP</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-icons">
+        <!-- <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.2" y2="16.2"/></svg> -->
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        <svg viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </div>
+    </header>
+
+    <div class="watermark-text">ATONA</div>
+
+    <img src="images/Monochromatic_Green_Look_Photo_on_Lummi-removebg-preview.png" alt="ATONA Featured Model" class="hero-model" />
+
+    <section class="hero-main">
+      <div class="left-column">
+        <div class="video-pill">
+          <div class="video-thumb">
+            <img src="images/mason-c-L9VEdI37uzg-unsplash.jpg" alt="Lookbook preview" />
+            <div class="play-icon">
+              <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+            </div>
+          </div>
+          <span class="video-label">Watch Video</span>
+        </div>
+
+        <div class="stats">
+          <h2>12k</h2>
+          <p>NEW COLLECTION</p>
+        </div>
+      </div>
+
+      <div class="right-column">
+        <p>ATONA fashion is a minimalist style that emphasizes simplicity, naturalness, and calmness.</p>
+        <a href="shop.html" class="cta-btn">
+          SHOP NOW
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </section>
+
+        <section class="category-grid">
+      <a href="men.html" class="cat-card">
+        <div class="cat-left">
+          <div class="cat-img-box">
+            <img src="images/pexels-cxpturing-souls-1377266-3014810.jpg" alt="Men's Collection" />
+          </div>
+          <span class="cat-title">Men’s</span>
+        </div>
+        <div class="cat-arrow">
+          <svg viewBox="0 0 24 24">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </div>
+      </a>
+
+      <a href="women.html" class="cat-card">
+        <div class="cat-left">
+          <div class="cat-img-box">
+            <img src="images/pexels-godisable-jacob-226636-794063.jpg" alt="Women's Collection" />
+          </div>
+          <span class="cat-title">Women’s</span>
+        </div>
+        <div class="cat-arrow">
+          <svg viewBox="0 0 24 24">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </div>
+      </a>
+
+      <a href="kids.html" class="cat-card">
+        <div class="cat-left">
+          <div class="cat-img-box">
+            <img src="images/modupe-falade-BayzMQkraW4-unsplash (1).jpg" alt="Kid's Collection" />
+          </div>
+          <span class="cat-title">Kid’s</span>
+        </div>
+        <div class="cat-arrow">
+          <svg viewBox="0 0 24 24">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </div>
+      </a>
+    </section>
+  </div>
+
+</body>
+</html>

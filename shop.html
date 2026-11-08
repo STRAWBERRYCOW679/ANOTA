@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATONA — Shop All Collections</title>
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-outer: #26482b;
+      --bg-hero-top: #466847;
+      --bg-hero-bottom: #608561;
+      --text-white: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.85);
+      --accent-dot: #d6c86b;
+      --dark-pill: #335235;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-outer);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 48px 96px;
+    }
+
+    .page-wrapper {
+      width: 100%;
+      background: linear-gradient(180deg, var(--bg-hero-top) 0%, var(--bg-hero-bottom) 100%);
+      border-radius: 18px;
+      position: relative;
+      overflow: hidden;
+      padding: 36px 64px 64px 64px;
+      color: var(--text-white);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 44px;
+    }
+
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: baseline;
+      text-decoration: none;
+      color: var(--text-white);
+    }
+
+    .logo span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background-color: var(--accent-dot);
+      border-radius: 50%;
+      margin-left: 3px;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--text-white);
+      font-weight: 700;
+    }
+
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .nav-icons svg {
+      width: 19px;
+      height: 19px;
+      stroke: var(--text-white);
+      fill: none;
+      stroke-width: 1.8;
+      cursor: pointer;
+    }
+
+    .bag-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .bag-count {
+      position: absolute;
+      top: -7px;
+      right: -9px;
+      background-color: var(--accent-dot);
+      color: #1a241b;
+      font-size: 0.68rem;
+      font-weight: 800;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shop-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 36px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .shop-header h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+    }
+
+    .shop-header p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.14);
+      color: var(--text-white);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .filter-btn.active {
+      background: var(--text-white);
+      color: var(--dark-pill);
+      border-color: var(--text-white);
+      font-weight: 700;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .product-card {
+      background: var(--text-white);
+      border-radius: 18px;
+      padding: 16px;
+      color: #1a241b;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.25s ease;
+      height: 100%;
+      gap: 12px;
+    }
+
+    .product-card.hidden {
+      display: none;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .product-img {
+      width: 100%;
+      height: 280px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #e5e8e5;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .category-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--dark-pill);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 50px;
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product-info h3 {
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .product-info span {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--dark-pill);
+    }
+
+    .add-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--dark-pill);
+      border: none;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.2s ease;
+    }
+
+    .add-btn:hover {
+      transform: scale(1.08);
+      background-color: #243b26;
+    }
+
+    .add-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-white);
+      stroke-width: 2.2;
+      fill: none;
+    }
+
+    .floating-home {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background-color: var(--text-white);
+      color: var(--dark-pill);
+      text-decoration: none;
+      padding: 14px 22px;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+      z-index: 100;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .floating-home:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    .floating-home svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--dark-pill);
+      stroke-width: 2.2;
+      fill: none;
+    }
+
+    @media (max-width: 992px) {
+      body { padding: 24px; }
+      .page-wrapper { padding: 28px 24px 42px 24px; }
+      nav { display: none; }
+      .product-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrapper">
+    <header>
+      <a href="index.html" class="logo">ATONA<span></span></a>
+      <nav>
+        <ul>
+          <li><a href="shop.html" class="active">SHOP</a></li>
+          <li><a href="men.html">MEN’S</a></li>
+          <li><a href="women.html">WOMEN’S</a></li>
+          <li><a href="kids.html">KID’S</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+        </ul>
+      </nav>
+      <div class="nav-icons">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.2" y2="16.2"/></svg>
+        <div class="bag-wrapper" title="Shopping Bag">
+          <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+          <span class="bag-count" id="bagCount">0</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="shop-header">
+      <div>
+        <h1>Shop ATONA</h1>
+        <p>Minimalist essentials crafted from organic cottons and natural linens.</p>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All Pieces</button>
+        <button class="filter-btn" data-filter="men">Men’s</button>
+        <button class="filter-btn" data-filter="women">Women’s</button>
+        <button class="filter-btn" data-filter="kids">Kid’s</button>
+      </div>
+    </section>
+
+    <section class="product-grid" id="productGrid">
+      <div class="product-card" data-category="men">
+        <div class="product-img">
+          <span class="category-tag">Men’s</span>
+          <img src="images/pexels-cxpturing-souls-1377266-3014810.jpg" alt="Sage Linen Overshirt" />
+        </div>
+        <div class="product-meta">
+          <div class="product-info">
+            <h3>Sage Linen Overshirt</h3>
+            <span>$85.00</span>
+          </div>
+          <button class="add-btn" aria-label="Add to bag">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="women">
+        <div class="product-img">
+          <span class="category-tag">Women’s</span>
+          <img src="images/pexels-godisable-jacob-226636-794063.jpg" alt="Draped Linen Midi Dress" />
+        </div>
+        <div class="product-meta">
+          <div class="product-info">
+            <h3>Draped Linen Midi Dress</h3>
+            <span>$110.00</span>
+          </div>
+          <button class="add-btn" aria-label="Add to bag">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      
+          <a href="women.html" class="add-btn" aria-label="View Women's Collection">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="kids">
+        <div class="product-img">
+          <span class="category-tag">Kid’s</span>
+          <img src="images/modupe-falade-BayzMQkraW4-unsplash (1).jpg" alt="Organic Cotton Co-ord Set" />
+        </div>
+        <div class="product-meta">
+          <div class="product-info">
+            <h3>Organic Cotton Co-ord Set</h3>
+            <span>$48.00</span>
+          </div>
+          <a href="kids.html" class="add-btn" aria-label="View Kid's Collection">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="men">
+        <div class="product-img">
+          <span class="category-tag">Men’s</span>
+          <img src="images/pexels-chris-wade-ntezicimpa-564856410-29043681.jpg" alt="Relaxed Pleated Trousers" />
+        </div>
+        <div class="product-meta">
+          <div class="product-info">
+            <h3>Relaxed Pleated Trousers</h3>
+            <span>$95.00</span>
+          </div>
+          <a href="men.html" class="add-btn" aria-label="View Men's Collection">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- <div class="product-card" data-category="women">
+        <div class="product-img">
+          <span class="category-tag">Women’s</span>
+          <img src="images/pexels-godisable-jacob-226636-3195981.jpg" alt="Wide-Leg Cotton Pants" />
+        </div>
+        <div class="product-meta">
+          <div class="product-info">
+            <h3>Wide-Leg Cotton Pants</h3>
+            <span>$88.00</span>
+          </div>
+          <a href="women.html" class="add-btn" aria-label="View Women's Collection">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="kids">
+        <div class="product-img">
+          <span class="category-tag">Kid’s</span>
+          <img src="images/terricks-noah-n9R0MN3XGvY-unsplash.jpg" alt="Soft Knit Pullover" />
+        </div>
+        <div class="product-meta">
+          <div class="product-info">
+            <h3>Soft Knit Pullover</h3>
+            <span>$42.00</span>
+          </div>
+          <a href="kids.html" class="add-btn" aria-label="View Kid's Collection">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </a>
+        </div>
+      </div> 
+    </section>
+  </div> 
+
+  <a href="index.html" class="floating-home" aria-label="Return to Home">
+    <svg viewBox="0 0 24 24">
+      <path d="M3 10.5L12 3l9 7.5" />
+      <path d="M5 9.5V20h14V9.5" />
+    </svg>
+    HOME
+  </a> -->
+
+</body>
+</html>
